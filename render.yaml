@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: steermate-backend
+    env: python
+    runtime: python3
+    buildCommand: "cd backend && pip install -r requirements.txt"
+    startCommand: "cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: DATABASE_URL
+        value: ${{ steermate-db.DATABASE_URL }}
+      - key: SECRET_KEY
+        value: 35259ba9b18faf1d74ad847a7a17b260a1746a3dc30d3ff428ba2251f0a922
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+    healthCheckPath: /docs  # Optional: For health checks
+
+databases:
+  - name: steermate-db
+    databaseName: steermate
+    user: steermate_user
+    postgresMajorVersion: 15  # Or match your version
